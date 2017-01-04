@@ -4,6 +4,7 @@ import datetime
 import matplotlib.pyplot as plt
 from matplotlib import style
 from sklearn.cluster import KMeans
+
 from math import sqrt
 
 style.use('ggplot')
@@ -127,20 +128,14 @@ for j in range(len(number_of_elem)):
                     l = i
         if(k < l):
             for i in range(l - k):
-                if((df_array[j][q]["y"][i+k] <= stop_y[0]) and (df_array[j][q]["x"][i+k] >= stop_x[2])):
-                    #plt.scatter(df_array[j][q]["x"][i+k], df_array[j][q]["y"][i+k], s=12)
+                if((df_array[j][q]["y"][i+k] < stop_y[0]) and (df_array[j][q]["x"][i+k] > stop_x[2])):
                     coordinates = coordinates.append({'x': df_array[j][q]["x"][i+k], 'y': df_array[j][q]["y"][i+k]}, ignore_index=True)
 
 
-#Adding points to 3 known stations so KMeans will guess them as stop stations                 
-for i in range(1000):
-    coordinates = coordinates.append({'x': stop_x[0], 'y': stop_y[0]}, ignore_index=True)
+#Adding points to known station so KMeans will guess it as a stop station 
     
-for i in range(1000):
+for i in range(50):
     coordinates = coordinates.append({'x': stop_x[1], 'y': stop_y[1]}, ignore_index=True)
-    
-for i in range(1000):
-    coordinates = coordinates.append({'x': stop_x[2], 'y': stop_y[2]}, ignore_index=True)
 
 for i in range(len(coordinates)):
     plt.scatter(coordinates['x'][i], coordinates['y'][i], s=12)
@@ -150,7 +145,7 @@ plt.scatter(stop_x, stop_y, s=50, c='r')
 X = coordinates[['x','y']].as_matrix()
 
 #Using KMeans algorithm
-clf = KMeans(n_clusters=39)
+clf = KMeans(n_clusters=37)
 
 clf.fit(X)
 
@@ -165,13 +160,12 @@ for i in range(len(centroids)):
     if (sqrt((centroids[i][0]-stop_x[0])*(centroids[i][0]-stop_x[0]) + (centroids[i][1]-stop_y[0])*(centroids[i][1]-stop_y[0])) < dist):
         dist = sqrt((centroids[i][0]-stop_x[0])*(centroids[i][0]-stop_x[0]) + (centroids[i][1]-stop_y[0])*(centroids[i][1]-stop_y[0]))
         k = i
-    #output = output.append({'x': centroids[i][0], 'y': centroids[i][1]}, ignore_index=True)
 
 output = output.append({'x': centroids[k][0], 'y': centroids[k][1]}, ignore_index=True)
 
 centroids = np.delete(centroids, (k), axis=0)
 
-for j in range(38):
+for j in range(36):
     dist = 999999
     k = -1
     for i in range(len(centroids)):
@@ -184,6 +178,6 @@ for j in range(38):
 for i in range(len(output)):
     plt.scatter(output['x'][i], output['y'][i], marker='x', s=50, linewidths=2)
             
-output.to_csv("output9.txt", index=False)
+output.to_csv("output1.txt", index=False)
     
 plt.show()
