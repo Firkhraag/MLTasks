@@ -131,12 +131,6 @@ for j in range(len(number_of_elem)):
                 if((df_array[j][q]["y"][i+k] < stop_y[0]) and (df_array[j][q]["x"][i+k] > stop_x[2])):
                     coordinates = coordinates.append({'x': df_array[j][q]["x"][i+k], 'y': df_array[j][q]["y"][i+k]}, ignore_index=True)
 
-
-#Adding points to known station so KMeans will guess it as a stop station 
-    
-for i in range(50):
-    coordinates = coordinates.append({'x': stop_x[1], 'y': stop_y[1]}, ignore_index=True)
-
 for i in range(len(coordinates)):
     plt.scatter(coordinates['x'][i], coordinates['y'][i], s=12)
     
@@ -178,6 +172,6 @@ for j in range(36):
 for i in range(len(output)):
     plt.scatter(output['x'][i], output['y'][i], marker='x', s=50, linewidths=2)
             
-output.to_csv("output1.txt", index=False)
+output.to_csv("output2.txt", index=False)
     
 plt.show()
